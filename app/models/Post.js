@@ -1,4 +1,4 @@
-function Post(title, subtitle, body, public, featured, archived, author, id, immagine, dataCreazione) {
+function Post(title, subtitle, body, public, featured, archived, author, id, dataCreazione, image) {
     this.title = title;
     this.subtitle = subtitle;
     this.body = body;
@@ -7,6 +7,6 @@ function Post(title, subtitle, body, public, featured, archived, author, id, imm
     this.archived = archived;
     this.author = author;
     this.id = id;
-    this.immagine = immagine;
     this.dataCreazione = dataCreazione;
+    this.image = image;
 }

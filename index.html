@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="index.css">
 </head>
 
-<body>
 
+
+<body>
     <hr>
     <h1>Back-Office del Blog </h1>
     <hr>
@@ -46,8 +47,9 @@
 
 
     <div id="whereToAddPosts">
-        <div class="post featured" id="post1">
+        <div class="post featured" id="postModello">
             <header>
+                Author: <i class="authorPost">Nicola</i>
                 <h4 class="title">Titolo: Modello di Post</h4>
                 <h5 class="subtitle">Sottotitolo: un minimo di descrizione del post</h5>
             </header>
@@ -58,21 +60,26 @@
                     <span class="badge badge-secondary public">Public/Draft</span>
                     <span class="badge badge-secondary featured">Featured/Not Featured</span>
                 </div>
-                Ciao a tutti, questo è il corpo/body del commento. Qui scriviamo varie cose. Aggiungiamo un po' di
-                commenti. Bla Bla Lorem ipsum.Bla Bla Lorem ipsum . Bla Bla Lorem ipsum. Bla Bla Lorem ipsum.
-                Bla Bla Lorem ipsum. Bla Bla Lorem ipsum. Bla Bla Lorem ipsum. Bla Bla Lorem ipsum.
+
+                <div class="bodyPost">
+                    Ciao a tutti, questo è il corpo/body del commento. Qui scriviamo varie cose. Aggiungiamo un po' di
+                    commenti. Bla Bla Lorem ipsum.Bla Bla Lorem ipsum . Bla Bla Lorem ipsum. Bla Bla Lorem ipsum.
+                    Bla Bla Lorem ipsum. Bla Bla Lorem ipsum. Bla Bla Lorem ipsum. Bla Bla Lorem ipsum.
+                </div>
+
                 <div class="postsControl">
-                    <button type="button" class="btn btn-primary btn-sm">Delete Post</button>
+                    <button type="button" class="btn btn-primary btn-sm deletePost">Delete Post</button>
                     <button type="button" class="btn btn-primary btn-sm">Update Post</button>
-                    <button type="button" class="btn btn-primary btn-sm">Archive Post</button>
+                    <button type="button" class="btn btn-primary btn-sm publicPost">Archive Post</button>
                 </div>
             </article>
             <footer>
                 <h5>Commenti:</h5>
-                <div class="commentsContainer">
-                    <div class="singleComment">
-                        Nicola:
-                        Ciao a tutti
+                <div class="commentsContainer" id="commentsContainerModel">
+                    <div class="singleComment" id="commentModel">
+                        <i class="commentAuthor">Nicola</i>:
+                        <i class="commentBody"> Ciao a tutti </i>;
+                        <i class="commentDate"> Quando? </i>
                         <button class="invisibleComment">invisibile?</button>
                     </div>
                     <div class="singleComment">
@@ -82,8 +89,8 @@
                     </div>
                 </div>
             </footer>
+            <hr>
         </div>
-
 
 
 
@@ -136,9 +143,6 @@
                         </label>
                     </div>
                 </div>
-
-
-
 
                 <!-- Salva i cambi: -->
                 <div class="modal-footer">
