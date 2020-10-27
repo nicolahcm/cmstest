@@ -2,9 +2,6 @@
 $(document).ready(function () {
 
 
-
-
-
     // Event listeners:  ADDED DYNAMICALLY
     // 1: Delete Post: 
     $(document).on('click', '.deletePost', function () {
@@ -60,10 +57,40 @@ $(document).ready(function () {
     // 3: UPDATE POST
 
 
+
+
+
+
+
     // 4: INVISIBILITY OF THE COMMENTS
+    $(document).on('click', '.invisibleCommentBtn', function () {
+        idComment = $(this).closest('.singleComment').attr('data-idcomment') // Funziona.
+        // qual è l'id del commento? Lo estrapolo dall'attributo data-idcomment
+        invisibleComment = $(this).closest('.singleComment').attr('data-invisible')
+        // E' invisibile il commento? Lo estrapolo dall'attributo data-invisible
+        urlComment = "http://localhost:3000/comments/" + idComment
+        // Funziona!:
+        //console.log("urlComment:", urlComment)// Funziona!! Ritorna l'id del commento!
+        //console.log("invisibleComment?:", invisibleComment)
 
+        var willItBeInvisible = (invisibleComment == "true") ? false : true
+        console.log(willItBeInvisible)
+        var dataToSend = { invisible: willItBeInvisible }
 
+        var that = $(this)
 
+        $.ajax({
+            type: 'PATCH',
+            url: urlComment,
+            data: dataToSend,
+            success: function (what) {
+                console.log("what?", what)
+                that.closest('.singleComment').attr('data-invisible', willItBeInvisible.toString())
+                that.siblings('.commentInvisible').html("invisibile? " + willItBeInvisible.toString())
+            }
+        })
+
+    })
 
 
 
@@ -261,10 +288,16 @@ $(document).ready(function () {
                 modelComment.attr('id', "")
 
                 let comment = listComments[k] // This is an object 
+                //console.log("commento:", comment)
+                console.log("comment._id:", comment._id) // è una stringa
                 modelComment.find(".commentAuthor").html(comment.commentUser)
                 modelComment.find(".commentBody").html(comment.body)
                 modelComment.find(".commentDate").html("data creazione:" + comment.Created_date)
-                //modelComment.find(".").html() // Per l'inviisibilità
+                modelComment.find(".commentInvisible").html("Invisibile? " + comment.invisible) // Per l'inviisibilità
+                modelComment.attr('data-idcomment', comment._id) // Aggiungo al commento un
+                // attributo che mi dica l'id del commento (l'id in mongodb)
+                modelComment.attr('data-invisible', comment.invisible) // Aggiungo al commento
+                // un attributo che mi dica se è invisibile o meno nel database
 
                 modelPost.find("#commentsContainerModel").prepend(modelComment)
                 console.log("iteration nr k:", k)
