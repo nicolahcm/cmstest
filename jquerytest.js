@@ -55,9 +55,79 @@ $(document).ready(function () {
 
 
     // 3: UPDATE POST
+    // The idea is define a global variable: editMode = false. Quando
+    // clicco sull'updatePost, cambio globalmente editMode = true (event listener
+    // sul bottone che mi apre la modale per updatare il post).
+    // A questo punto, nell'event listener del bottone salva post, 
+    // metto che se editMode = true, crea un post. se è false invia 
+    // una richiesta patch.
+
+    var editMode = false;
+    var idArticoloDaUpdatare;// Variabile globale 
+    // salvo il valore dell'idarticolo da updatare quando clicco
+    // update relativo ad un post. E' l'unico modo di farlo.
+
+    // Quando clicco su "Updata articolo"
+    $(document).on('click', ".forUpdateArticle", function () {
+        editMode = true;
+        idArticoloDaUpdatare = $(this).closest(".post").attr('id')
+        console.log("idArticoloDaUpdatare:", idArticoloDaUpdatare)
+    })
+    // Quando clicco su " Nuovo Articolo "
+    $(document).on('click', ".forNewArticle", function () {
+        editMode = false;
+    })
+
+
+    //function catturaValoriModale
+    // Però se la definisco, deve ritornare postTitle, subTitlePost ecc..
+    // Oppure le definisco come variabili globali e assegno.
+
+
+    function updataPostQuandoCliccoSalva() {
+        // 1. Cattura i valori // Questa parte di catturare i valori posso
+        //    scriverla in una funzione, visto che lo riuso anche sotto.
+        var postTitle = $('#postTitle').val();
+        console.log("postTitle changed:", postTitle);// è una stringa!!
+        var subTitlePost = $('#postSubTitle').val();
+        console.log("postSubtitle:", subTitlePost);
+        var postBody = $('#postBody').val();
+        console.log("postBody:", postBody);
+        var postAuthor = $('#postAuthor').val();
+        console.log("postAuthor:", postAuthor);
+        var postFeatured = $('#featuredCheck').is(":checked");
+        console.log("postFeatured:", postFeatured);
+        var postPublic = $('#publicCheck').is(":checked");
+        console.log("postPublic:", postPublic);
+
+        // 2. Get the id of the post to update!
+        //   l'ho salvato nella var globale idArticoloDaUpdatare.
+
+        // 3. data 
+        var data = {
+            title: postTitle,
+            subtitle: subTitlePost,
+            body: postBody,
+            author: postAuthor,
+            featured: postFeatured,
+            public: postPublic,
+            archived: false,
+        }
 
 
 
+        // 4. Chiamata patch
+        $.ajax({
+            type: 'PATCH',
+            url: "http://localhost:3000/posts/" + idArticoloDaUpdatare,
+            data: data,
+            success: function (what) {
+                closeModal()
+                alert("post Updated. Reload to see the changes.");
+            }
+        })
+
+    }
 
 
 
@@ -161,77 +231,80 @@ $(document).ready(function () {
 
 
     $('#savePostButton').click(function () {
+        if (editMode == false) {
+            // Se editMode==false, tutte le istruzioni nel creare il post
+            // Posso metterle in una funzione. Così risulta più leggibile.
 
-        // 1. Cattura i valori
-        var postTitle = $('#postTitle').val();
-        console.log("postTitle changed:", postTitle);
-        var subTitlePost = $('#postSubTitle').val();
-        console.log("postSubtitle:", subTitlePost);
-        var postBody = $('#postBody').val();
-        console.log("postBody:", postBody);
-        var postAuthor = $('#postAuthor').val();
-        console.log("postAuthor:", postAuthor);
-        var postFeatured = $('#featuredCheck').is(":checked");
-        console.log("postFeatured:", postFeatured);
-        var postPublic = $('#publicCheck').is(":checked");
-        console.log("postPublic:", postPublic);
-
-
-
-
-
-
-        var post = new Post(postTitle,
-            subTitlePost,
-            postBody,
-            postPublic,
-            postFeatured,
-            false,
-            postAuthor)
-
-        console.log("post creato:", post)
+            // 1. Cattura i valori
+            var postTitle = $('#postTitle').val();
+            console.log("postTitle changed:", postTitle);
+            var subTitlePost = $('#postSubTitle').val();
+            console.log("postSubtitle:", subTitlePost);
+            var postBody = $('#postBody').val();
+            console.log("postBody:", postBody);
+            var postAuthor = $('#postAuthor').val();
+            console.log("postAuthor:", postAuthor);
+            var postFeatured = $('#featuredCheck').is(":checked");
+            console.log("postFeatured:", postFeatured);
+            var postPublic = $('#publicCheck').is(":checked");
+            console.log("postPublic:", postPublic);
 
 
-        var data = {
-            title: postTitle,
-            subtitle: subTitlePost,
-            body: postBody,
-            author: postAuthor,
-            featured: postFeatured,
-            public: postPublic,
-            archived: false,
-        }
-        console.log("data:", data)
+            var post = new Post(postTitle,
+                subTitlePost,
+                postBody,
+                postPublic,
+                postFeatured,
+                false,
+                postAuthor)
+
+            console.log("post creato:", post)
 
 
-
-
-
-        $.post({
-            url: "http://localhost:3000/posts",
-            data: data,
-            //async: false,
-            success: function (msgRitornato, textStatus) {
-                console.log('msgRitornato:', msgRitornato);
-                console.log('textStatus:', textStatus);
-                console.log('msgRitornato._id:', msgRitornato._id); // è l'id del post!
-                var idPost = msgRitornato._id;
-                console.log("idPost:", idPost);
-                console.log("type of idPost:", typeof (idPost)) // è una stringa
-
-                createUIPost(post, idPost)
-                // createUIPost
-                // Ora devi creare il post con idPost (per i commenti)
-                // Per crearlo scrivi una funzione da un'altra parte. 
-                // Nota che non possiamo scrivere la funzione dopo il post (ovvero al di
-                // fuori di success). Questo perchè dobbiamo aspettare che 
-                // il la chiamata ajax, che è asincrona, abbia terminato e ritornato
-                // il valore di idPost.
-
+            var data = {
+                title: postTitle,
+                subtitle: subTitlePost,
+                body: postBody,
+                author: postAuthor,
+                featured: postFeatured,
+                public: postPublic,
+                archived: false,
             }
-        })
+            console.log("data:", data)
 
-        closeModal();
+            $.post({
+                url: "http://localhost:3000/posts",
+                data: data,
+                //async: false,
+                success: function (msgRitornato, textStatus) {
+                    console.log('msgRitornato:', msgRitornato);
+                    console.log('textStatus:', textStatus);
+                    console.log('msgRitornato._id:', msgRitornato._id); // è l'id del post!
+                    var idPost = msgRitornato._id;
+                    console.log("idPost:", idPost);
+                    console.log("type of idPost:", typeof (idPost)) // è una stringa
+
+                    createUIPost(post, idPost)
+                    // createUIPost
+                    // Ora devi creare il post con idPost (per i commenti)
+                    // Per crearlo scrivi una funzione da un'altra parte. 
+                    // Nota che non possiamo scrivere la funzione dopo il post (ovvero al di
+                    // fuori di success). Questo perchè dobbiamo aspettare che 
+                    // il la chiamata ajax, che è asincrona, abbia terminato e ritornato
+                    // il valore di idPost.
+
+                }
+            })
+
+            closeModal();
+
+        } else {  // if editMode = true, posso scrivere
+            // Una funzione che updata il post e richiamare qua la funzione così 
+            // è più leggibile.
+            updataPostQuandoCliccoSalva()
+
+
+        }
 
     })
 
