@@ -8,7 +8,7 @@ $(document).ready(function () {
         idParent = $(this).closest('.post').attr('id') // closest goes up in the parents.
         //console.log(idParent) // FUNZIONA!! è GIUSTO!!
 
-        urlPost = "http://localhost:3000/posts/" + idParent
+        urlPost = "https://backend-blog-experis.herokuapp.com/posts/" + idParent
 
         $.ajax({
             url: urlPost,
@@ -26,7 +26,7 @@ $(document).ready(function () {
     // 2. Patch for public/ not public: toggle publicity.
     $(document).on('click', '.publicPost', function () {
         idParent = $(this).closest('.post').attr('id') // Funziona.
-        urlPost = "http://localhost:3000/posts/" + idParent
+        urlPost = "https://backend-blog-experis.herokuapp.com/posts/" + idParent
 
         var val = $('#' + idParent).find(".public").text()  // Era da chiamare .publicBadge the class!
         console.log("inside the tag:", val) // OKK
@@ -119,7 +119,7 @@ $(document).ready(function () {
         // 4. Chiamata patch
         $.ajax({
             type: 'PATCH',
-            url: "http://localhost:3000/posts/" + idArticoloDaUpdatare,
+            url: "https://backend-blog-experis.herokuapp.com/posts/" + idArticoloDaUpdatare,
             data: data,
             success: function (what) {
                 closeModal()
@@ -138,7 +138,7 @@ $(document).ready(function () {
         // qual è l'id del commento? Lo estrapolo dall'attributo data-idcomment
         invisibleComment = $(this).closest('.singleComment').attr('data-invisible')
         // E' invisibile il commento? Lo estrapolo dall'attributo data-invisible
-        urlComment = "http://localhost:3000/comments/" + idComment
+        urlComment = "https://backend-blog-experis.herokuapp.com/comments/" + idComment
         // Funziona!:
         //console.log("urlComment:", urlComment)// Funziona!! Ritorna l'id del commento!
         //console.log("invisibleComment?:", invisibleComment)
@@ -178,7 +178,7 @@ $(document).ready(function () {
         // 1. chiamata get ai posts
         // GETTING ALL POSTS 
         $.get({
-            url: "http://localhost:3000/posts",
+            url: "https://backend-blog-experis.herokuapp.com/posts",
             async: false, // Executing asyncrhonously: waiting for posts
             success: function (data, textStat) {
                 console.log("data is:", data)
@@ -199,7 +199,7 @@ $(document).ready(function () {
 
         // 2. chiamata get ai comments. (sincrona)
         $.get({
-            url: "http://localhost:3000/comments",
+            url: "https://backend-blog-experis.herokuapp.com/comments",
             async: false,  // Executing asyncrhonously: waiting for comments
             success: function (data, textStat) {
                 console.log("data is:", data)
@@ -273,7 +273,7 @@ $(document).ready(function () {
             console.log("data:", data)
 
             $.post({
-                url: "http://localhost:3000/posts",
+                url: "https://backend-blog-experis.herokuapp.com/posts",
                 data: data,
                 //async: false,
                 success: function (msgRitornato, textStatus) {
